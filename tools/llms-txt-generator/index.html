@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>llms.txt Generator — Give AI assistants a map of your site | Nymrel Tools</title>
+<meta name="description" content="Answer a few questions and get a ready-to-publish llms.txt file — a curated map of your site that AI assistants can read in one pass. Free, runs in your browser, no sign-up.">
+<link rel="canonical" href="https://nymrel.com/tools/llms-txt-generator">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Nymrel Tools">
+<meta property="og:title" content="llms.txt Generator — Give AI assistants a map of your site">
+<meta property="og:description" content="Answer a few questions and get a ready-to-publish llms.txt file — a curated map of your site that AI assistants can read in one pass. Free, runs in your browser, no sign-up.">
+<meta property="og:url" content="https://nymrel.com/tools/llms-txt-generator">
+<meta property="og:image" content="https://nymrel.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="llms.txt Generator — Give AI assistants a map of your site">
+<meta name="twitter:description" content="Answer a few questions and get a ready-to-publish llms.txt file — free, runs in your browser, no sign-up.">
+<meta name="twitter:image" content="https://nymrel.com/assets/og.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preload" href="/assets/fonts/instrumentserif-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/instrumentsans-normal-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "llms.txt Generator",
+      "url": "https://nymrel.com/tools/llms-txt-generator",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web browser",
+      "description": "A guided form that produces a ready-to-publish llms.txt file — the curated site map AI crawlers look for at /llms.txt. Free to use, runs entirely in the browser.",
+      "publisher": {
+        "@id": "https://nymrel.com/#organization"
+      },
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Free",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        {
+          "@type": "Offer",
+          "name": "Deluxe Kit",
+          "price": "9",
+          "priceCurrency": "USD"
+        }
+      ],
+      "creator": {
+        "@id": "https://nymrel.com/#organization"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Tools",
+          "item": "https://nymrel.com/tools"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "llms.txt Generator",
+          "item": "https://nymrel.com/tools/llms-txt-generator"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is llms.txt?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A plain-text file at yoursite.com/llms.txt that gives AI assistants a curated map of your site — your key pages, products, and anything else worth knowing, written so a language model can read it in seconds."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need an llms.txt file?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It's not required, but AI assistants increasingly check for one before they crawl your whole site. A small file that points them straight to your best pages makes it far more likely they find and quote you correctly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I install the file on my site?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Save the generated text as llms.txt and upload it to your site's root folder — not a subfolder — so it loads at yoursite.com/llms.txt."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my data safe?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Everything runs in your browser. Nothing you type here leaves your device — there is no server collecting it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's included in the Deluxe Kit?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A five-file zip built from what you typed in: your llms.txt tightened, a robots.txt allowlist naming 12 AI crawlers, an Organization JSON-LD block, and a printable install checklist written for your platform. It is generated in your browser and downloads right after checkout."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  .bench-actions { display: flex; gap: 8px; }
+  .step-card .step-num { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.16em; color: var(--brass); margin-bottom: 0.6rem; }
+  .step-card h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+  .step-card p { color: var(--ink-dim); font-size: 0.94rem; margin: 0; }
+  .req-star { color: var(--brass); }
+
+  /* robust show/hide: several shared components set an explicit `display`,
+     which the native [hidden] UA rule can lose to (author origin beats UA
+     origin regardless of specificity). One !important utility sidesteps it. */
+  .is-hidden { display: none !important; }
+
+  .controls-top { display: flex; justify-content: flex-end; margin-bottom: 1.1rem; }
+
+  .ghost-example { font-family: var(--font-mono); font-size: 0.74rem; color: var(--ink-faint); margin: -2px 0 6px; }
+  .ghost-example code { color: var(--ink-dim); }
+
+  .skip-hint { font-size: 0.78rem; color: var(--warn); margin-top: 4px; min-height: 1.1em; }
+
+  #example-tag { margin-left: 8px; }
+
+  /* file-tab presentation above the codebox */
+  .file-tab { display: flex; align-items: center; gap: 8px; padding: 8px 1.3rem; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; color: var(--ink-faint); background: var(--panel-2); border-bottom: 1px solid var(--line); }
+  .file-tab-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px var(--accent); flex-shrink: 0; }
+
+  /* line-number gutter — a separate element so Copy never touches it */
+  .codebox-body { display: flex; max-height: 560px; overflow: auto; }
+  .code-line-numbers { user-select: none; text-align: right; padding: 1.3rem 0.7rem 1.3rem 1rem; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.6; color: var(--ink-faint); opacity: 0.45; white-space: pre; border-right: 1px solid var(--line); flex-shrink: 0; }
+  #output-text { margin: 0; padding: 1.3rem; overflow: visible; max-height: none; min-width: 0; flex: 1 1 auto; }
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","@id":"https://nymrel.com/#organization","email":"contact@nymrel.com","legalName":"JalenBuilds LLC","name":"Nymrel","url":"https://nymrel.com"}
+</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body data-tool="llms" data-pro-product="llms-deluxe" data-pro-module="llms-pro">
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="/"><span class="mark">◆</span> nymrel<span class="sub">/ tool works</span></a>
+    <nav class="primary" aria-label="Primary">
+      <a href="/tools/ai-visibility-scorecard/">Scorecard</a>
+      <a href="/tools/llms-txt-generator/" class="active">llms.txt</a>
+      <a href="/tools/json-ld-generator/">JSON-LD</a>
+      <a href="/tools/qr-utm-generator/">QR + UTM</a>
+      <a href="/tools/token-spend-dashboard/">Token Ledger</a>
+      <a href="/tools/chatgpt-recommends/">ChatGPT Check</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <nav class="crumbs wrap"><a href="/">Tools</a> <span class="sep">/</span> llms.txt Generator</nav>
+
+  <section class="hero" style="padding:3.5rem 0 3rem">
+    <div class="wrap">
+      <div class="hero-glyph">
+        <div class="tool-glyph" aria-hidden="true"><svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="9" r="3"/>
+          <path d="M24 12 L24 18 M24 18 L12 34 M24 18 L24 38 M24 18 L36 34"/>
+          <circle cx="12" cy="34" r="2.4"/>
+          <circle cx="36" cy="34" r="2.4"/>
+          <circle cx="24" cy="38" r="3.2" fill="currentColor"/>
+        </svg></div>
+        <div class="kicker" style="margin-bottom:0">Free tool · about 3 minutes</div>
+      </div>
+      <h1 style="max-width:12em">Give AI assistants a map of your site.</h1>
+      <p class="lede">llms.txt is a plain-text file at your site root that tells AI assistants what your site is and where the important pages are — a growing convention they can read in one pass. Answer a few questions and get one that's ready to publish.</p>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="workbench">
+      <div class="controls">
+        <div class="hint-once" id="hint-once">
+          <span><b>Three required fields</b> and you have a valid file — the rest is bonus depth.</span>
+          <button class="hx" id="hint-dismiss" type="button" aria-label="Dismiss hint">×</button>
+        </div>
+
+        <div class="controls-top">
+          <button class="try-btn" id="btn-try" type="button">Try an example</button>
+        </div>
+
+        <label class="field">
+          <span class="lab"><span>What's your site called? <span class="req-star">*</span></span><span class="code-chip">site name</span></span>
+          <input type="text" id="site-name" placeholder="Acme Bakery" required>
+          <p class="field-msg is-hidden" id="site-name-msg"></p>
+        </label>
+
+        <label class="field">
+          <span class="lab"><span>Where does it live? <span class="req-star">*</span></span><span class="code-chip">site url</span></span>
+          <input type="url" id="site-url" placeholder="https://acmebakery.com" required>
+          <p class="field-msg is-hidden" id="url-hint"></p>
+        </label>
+
+        <label class="field">
+          <span class="lab"><span>What do you do, in one line? <span class="req-star">*</span></span><span class="code-chip">summary</span></span>
+          <input type="text" id="summary" placeholder="We bake sourdough and pastries daily in Austin, TX." required>
+          <div class="help">What you do, for whom, in one sentence.</div>
+          <p class="field-msg is-hidden" id="summary-msg"></p>
+        </label>
+
+        <label class="field">
+          <span class="lab"><span>Want to add more context?</span><span class="code-chip">about</span></span>
+          <textarea id="about" rows="3" placeholder="A short paragraph of context — history, focus, anything worth an AI assistant knowing before it reads your pages."></textarea>
+        </label>
+
+        <label class="field">
+          <span class="lab"><span>Which pages matter most?</span><span class="code-chip">key pages</span></span>
+          <p class="ghost-example">e.g. <code>Menu | /menu | Full daily menu and prices</code></p>
+          <textarea id="pages-key" rows="4" placeholder="Home | https://acmebakery.com | What we do and who it's for
+Contact | /contact | Phone, email, and hours"></textarea>
+          <div class="help">One per line — <span class="mono">Title | URL | description</span></div>
+          <div class="skip-hint" id="pages-key-hint"></div>
+        </label>
+
+        <label class="field">
+          <span class="lab"><span>Selling something specific?</span><span class="code-chip">products &amp; services</span></span>
+          <p class="ghost-example">e.g. <code>House Blend Beans | /shop/house-blend | 12oz bag, medium roast</code></p>
+          <textarea id="pages-products" rows="4" placeholder="Sourdough Loaf | /products/sourdough | Baked fresh every morning
+Catering | /catering | Trays and boxes for events"></textarea>
+          <div class="help">One per line — <span class="mono">Title | URL | description</span></div>
+          <div class="skip-hint" id="pages-products-hint"></div>
+        </label>
+
+        <label class="field">
+          <span class="lab"><span>Got docs or FAQs?</span><span class="code-chip">guides &amp; docs</span></span>
+          <p class="ghost-example">e.g. <code>Shipping FAQ | /faq | Delivery windows and order minimums</code></p>
+          <textarea id="pages-guides" rows="4" placeholder="Ordering FAQ | /faq | Delivery windows and order minimums
+Allergen guide | /allergens | Full ingredient breakdown"></textarea>
+          <div class="help">One per line — <span class="mono">Title | URL | description</span></div>
+          <div class="skip-hint" id="pages-guides-hint"></div>
+        </label>
+
+        <label class="field">
+          <span class="lab"><span>Anything AI should know before it reads on?</span><span class="code-chip">notes</span></span>
+          <textarea id="notes" rows="3" placeholder="We're closed Mondays.
+We only deliver within Austin city limits.
+Prices shown are before tax."></textarea>
+          <div class="help">One bullet per line, freeform.</div>
+        </label>
+
+        <label class="field" style="margin-bottom:0">
+          <span class="lab"><span>Where can people reach you?</span><span class="code-chip">contact email</span></span>
+          <input type="email" id="contact-email" placeholder="hello@acmebakery.com">
+          <p class="field-msg is-hidden" id="contact-email-msg"></p>
+        </label>
+      </div>
+
+      <div class="output">
+        <div class="bench-head">
+          <span><span class="dot"></span>OUTPUT — llms.txt<span class="tag brass is-hidden" id="example-tag">Example</span></span>
+          <div class="bench-actions">
+            <button class="btn btn-sm" id="btn-copy" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>Copy file</button>
+            <button class="btn btn-sm btn-primary" id="btn-download" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 19h16"/></svg>Download llms.txt</button>
+          </div>
+        </div>
+        <div class="file-tab"><span class="file-tab-dot" aria-hidden="true"></span>llms.txt</div>
+        <div class="codebox is-empty" id="codebox">
+          <div class="empty-state" id="empty-state">
+            <div class="tool-glyph" aria-hidden="true"><svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="9" r="3"/>
+              <path d="M24 12 L24 18 M24 18 L12 34 M24 18 L24 38 M24 18 L36 34"/>
+              <circle cx="12" cy="34" r="2.4"/>
+              <circle cx="36" cy="34" r="2.4"/>
+              <circle cx="24" cy="38" r="3.2" fill="currentColor"/>
+            </svg></div>
+            <p class="es-line">Nothing on the map yet.</p>
+            <p class="es-hint">Fill in site name, URL, and summary on the left — that's a valid file already.</p>
+            <button class="try-btn" id="btn-try-empty" type="button">Try an example</button>
+          </div>
+          <div class="codebox-body is-hidden" id="codebox-body">
+            <div class="code-line-numbers" id="line-numbers" aria-hidden="true"></div>
+            <pre id="output-text"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-bar is-hidden" id="action-bar">
+      <button class="btn" id="btn-copy-mobile" type="button" aria-label="Copy llms.txt file"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>Copy</button>
+      <button class="btn btn-primary" id="btn-download-mobile" type="button" aria-label="Download llms.txt file"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 19h16"/></svg>Download llms.txt</button>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="kicker">Where to put it</div>
+    <h2 style="margin-bottom:1.5rem">Three steps, one file</h2>
+    <div class="grid-3">
+      <div class="panel step-card">
+        <div class="step-num">STEP 1</div>
+        <h3>Save the file</h3>
+        <p>Download the generated text as <span class="mono">llms.txt</span> — the button above already names it correctly.</p>
+      </div>
+      <div class="panel step-card">
+        <div class="step-num">STEP 2</div>
+        <h3>Upload it to your site root</h3>
+        <p>Put it in the top-level folder of your site, not a subfolder, so it loads at <span class="mono">yoursite.com/llms.txt</span>.</p>
+      </div>
+      <div class="panel step-card">
+        <div class="step-num">STEP 3</div>
+        <h3>Check it in a browser</h3>
+        <p>Visit <span class="mono">yoursite.com/llms.txt</span> and confirm the plain text loads — that's what AI crawlers will see.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="kicker">Pricing</div>
+    <h2 style="margin-bottom:1.5rem">Free generator. Paid kit when you want the whole install.</h2>
+    <div class="pricing">
+      <div class="price-card">
+        <div class="tier">Free</div>
+        <div class="amount">$0 <small>forever</small></div>
+        <ul>
+          <li>Unlimited llms.txt generation</li>
+          <li>Runs entirely in your browser</li>
+          <li>No sign-up, no email required</li>
+          <li>Copy or download anytime</li>
+        </ul>
+        <p style="color:var(--ink-faint);font-size:0.85rem;margin:0">This is the whole tool. Nothing above is locked.</p>
+      </div>
+      <div class="price-card featured">
+        <div class="tier">Deluxe Kit</div>
+        <div class="amount">$9 <small>one-time</small></div>
+        <ul>
+          <li>Your llms.txt tightened — absolute URLs, duplicate pages dropped, long descriptions trimmed</li>
+          <li>robots.txt allowlist naming 12 AI crawlers, written for your platform</li>
+          <li>JSON-LD Organization block built from your details</li>
+          <li>One-page install checklist, printable</li>
+          <li>Unlocks on this page and downloads right after checkout</li>
+        </ul>
+        <button class="btn btn-primary" data-buy="llms-deluxe" style="width:100%;justify-content:center">Get Deluxe Kit — $9</button>
+        <p class="help" style="color:var(--ink-faint);font-size:0.85rem;margin:0.9rem 0 0">Fill in your site name, URL, and summary above first — the kit is built from your own inputs, in your browser.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="kicker">Questions, answered plainly</div>
+    <h2 style="margin-bottom:1.5rem">Before you ask</h2>
+    <div class="faq">
+      <details>
+        <summary>What is llms.txt?</summary>
+        <p class="a">A plain-text file at yoursite.com/llms.txt that gives AI assistants a curated map of your site — your key pages, products, and anything else worth knowing, written so a language model can read it in seconds.</p>
+      </details>
+      <details>
+        <summary>Do I need an llms.txt file?</summary>
+        <p class="a">It's not required, but AI assistants increasingly check for one before they crawl your whole site. A small file that points them straight to your best pages makes it far more likely they find and quote you correctly.</p>
+      </details>
+      <details>
+        <summary>How do I install the file on my site?</summary>
+        <p class="a">Save the generated text as llms.txt and upload it to your site's root folder — not a subfolder — so it loads at yoursite.com/llms.txt.</p>
+      </details>
+      <details>
+        <summary>Is my data safe?</summary>
+        <p class="a">Yes. Everything runs in your browser. Nothing you type here leaves your device — there is no server collecting it.</p>
+      </details>
+      <details>
+        <summary>What's included in the Deluxe Kit?</summary>
+        <p class="a">A five-file zip built from what you typed above: your llms.txt tightened, a robots.txt allowlist naming 12 AI crawlers, an Organization JSON-LD block, and a printable install checklist written for your platform. It is generated here in your browser and downloads as soon as you're back from checkout.</p>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap cols">
+    <div>
+      <p class="fh">Nymrel Tools</p>
+      <p style="max-width:26em">Small, sharp tools from a working studio. Everything runs in your browser; nothing you paste leaves your device.</p>
+      <p class="mono" style="font-size:0.78rem">© <span data-year>2026</span> JalenBuilds LLC</p>
+      <p class="mono" style="font-size:0.78rem"><a href="https://nymrel.com?utm_source=jalenbuilds-tools&amp;utm_medium=footer-credit&amp;utm_campaign=built-by-nymrel" rel="author">Built by Nymrel</a></p>
+    </div>
+    <div>
+      <p class="fh">Catalog</p>
+      <ul>
+        <li><a href="/tools/ai-visibility-scorecard/">AI Visibility Scorecard</a></li>
+        <li><a href="/tools/llms-txt-generator/">llms.txt Generator</a></li>
+        <li><a href="/tools/json-ld-generator/">JSON-LD Studio</a></li>
+        <li><a href="/tools/qr-utm-generator/">QR + UTM Studio</a></li>
+        <li><a href="/tools/token-spend-dashboard/">Token Ledger</a></li>
+        <li><a href="/tools/chatgpt-recommends/">ChatGPT Check</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="fh">Studio</p>
+      <ul>
+        <li><a href="mailto:contact@nymrel.com">contact@nymrel.com</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/checkout-config.js"></script>
+<script src="/assets/site.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "jbt.llms.form";
+  var HINT_KEY = "jbt.llms.hinted";
+
+  var fields = {
+    siteName: document.getElementById("site-name"),
+    siteUrl: document.getElementById("site-url"),
+    summary: document.getElementById("summary"),
+    about: document.getElementById("about"),
+    pagesKey: document.getElementById("pages-key"),
+    pagesProducts: document.getElementById("pages-products"),
+    pagesGuides: document.getElementById("pages-guides"),
+    notes: document.getElementById("notes"),
+    contactEmail: document.getElementById("contact-email")
+  };
+
+  var hints = {
+    pagesKey: document.getElementById("pages-key-hint"),
+    pagesProducts: document.getElementById("pages-products-hint"),
+    pagesGuides: document.getElementById("pages-guides-hint")
+  };
+
+  var codebox = document.getElementById("codebox");
+  var codeboxBody = document.getElementById("codebox-body");
+  var emptyStateEl = document.getElementById("empty-state");
+  var lineNumbersEl = document.getElementById("line-numbers");
+  var outputEl = document.getElementById("output-text");
+  var exampleTag = document.getElementById("example-tag");
+  var actionBarEl = document.getElementById("action-bar");
+
+  /* ---------- parsing helpers (generation logic — unchanged) ---------- */
+
+  function parseLines(raw) {
+    var entries = [];
+    var skipped = 0;
+    if (!raw) return { entries: entries, skipped: skipped };
+    var lines = raw.split(/\r?\n/);
+    lines.forEach(function (line) {
+      var trimmed = line.trim();
+      if (!trimmed) return;
+      var parts = trimmed.split("|").map(function (p) { return p.trim(); });
+      if (parts.length < 2 || !parts[0] || !parts[1]) {
+        skipped++;
+        return;
+      }
+      var desc = parts.length >= 3 ? parts.slice(2).join(" | ").trim() : "";
+      entries.push({ title: parts[0], url: parts[1], desc: desc });
+    });
+    return { entries: entries, skipped: skipped };
+  }
+
+  function siteOrigin(rawUrl) {
+    if (!rawUrl) return "";
+    var u = rawUrl.trim();
+    if (!/^https?:\/\//i.test(u)) u = "https://" + u.replace(/^\/+/, "");
+    try {
+      return new URL(u).origin;
+    } catch (e) {
+      return u.replace(/\/+$/, "");
+    }
+  }
+
+  function resolveUrl(url, origin) {
+    if (!url) return url;
+    if (/^https?:\/\//i.test(url)) return url;
+    if (/^\/\//.test(url)) return "https:" + url;
+    if (url.charAt(0) === "/") return (origin || "") + url;
+    if (/^[\w-]+(\.[\w-]+)+(\/|$)/.test(url)) return "https://" + url;
+    return (origin ? origin + "/" : "https://") + url.replace(/^\/+/, "");
+  }
+
+  function buildSection(title, raw, origin) {
+    var parsed = parseLines(raw);
+    var lines = parsed.entries.map(function (e) {
+      var url = resolveUrl(e.url, origin);
+      return "- [" + e.title + "](" + url + ")" + (e.desc ? ": " + e.desc : "");
+    });
+    return {
+      markdown: lines.length ? ("## " + title + "\n" + lines.join("\n")) : "",
+      skipped: parsed.skipped
+    };
+  }
+
+  function updateHint(el, skipped) {
+    if (!el) return;
+    if (skipped > 0) {
+      el.textContent = skipped === 1
+        ? "One line skipped — needs at least a title and a URL, like Title | URL"
+        : skipped + " lines skipped — needs at least a title and a URL, like Title | URL";
+    } else {
+      el.textContent = "";
+    }
+  }
+
+  function setLineNumbers(text) {
+    if (!lineNumbersEl) return;
+    var clean = text.replace(/\n+$/, "");
+    var count = clean ? clean.split("\n").length : 0;
+    var nums = [];
+    for (var i = 1; i <= count; i++) nums.push(i);
+    lineNumbersEl.textContent = nums.join("\n");
+  }
+
+  /* ---------- generate (same output logic, presentation wiring added) ---------- */
+
+  function generate() {
+    var siteName = fields.siteName.value.trim();
+    var siteUrl = fields.siteUrl.value.trim();
+    var summary = fields.summary.value.trim();
+    var about = fields.about.value.trim();
+    var origin = siteOrigin(siteUrl);
+
+    var keyPages = buildSection("Key pages", fields.pagesKey.value, origin);
+    var products = buildSection("Products & services", fields.pagesProducts.value, origin);
+    var guides = buildSection("Guides & docs", fields.pagesGuides.value, origin);
+
+    updateHint(hints.pagesKey, keyPages.skipped);
+    updateHint(hints.pagesProducts, products.skipped);
+    updateHint(hints.pagesGuides, guides.skipped);
+
+    var hasRequired = Boolean(siteName && siteUrl && summary);
+    document.body.classList.toggle("has-action-bar", hasRequired);
+    if (actionBarEl) actionBarEl.classList.toggle("is-hidden", !hasRequired);
+
+    if (!hasRequired) {
+      emptyStateEl.classList.remove("is-hidden");
+      codeboxBody.classList.add("is-hidden");
+      codebox.classList.add("is-empty");
+      persist();
+      return;
+    }
+
+    var notesLines = fields.notes.value.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean);
+    var notesBlock = notesLines.length ? ("## Notes\n" + notesLines.map(function (l) { return "- " + l; }).join("\n")) : "";
+
+    var contact = fields.contactEmail.value.trim();
+    var contactBlock = contact ? ("## Contact\n- [" + contact + "](mailto:" + contact + ")") : "";
+
+    var blocks = [];
+    blocks.push("# " + siteName);
+    blocks.push("> " + summary);
+    if (about) blocks.push(about);
+    [keyPages, products, guides].forEach(function (s) { if (s.markdown) blocks.push(s.markdown); });
+    if (notesBlock) blocks.push(notesBlock);
+    if (contactBlock) blocks.push(contactBlock);
+
+    var text = blocks.join("\n\n") + "\n";
+    outputEl.textContent = text;
+    setLineNumbers(text);
+    emptyStateEl.classList.add("is-hidden");
+    codeboxBody.classList.remove("is-hidden");
+    codebox.classList.remove("is-empty");
+    persist();
+  }
+
+  /* ---------- inline validation ---------- */
+
+  function isLikelyUrl(v) {
+    var probe = /^https?:\/\//i.test(v) ? v : "https://" + v.replace(/^\/+/, "");
+    try { return /\./.test(new URL(probe).hostname); } catch (e) { return false; }
+  }
+
+  function isLikelyEmail(v) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  var validators = {
+    siteName: function () {
+      var v = fields.siteName.value.trim();
+      if (!v) return { state: "err", msg: "This one's required — what should we call your site?" };
+      return { state: "ok", msg: "" };
+    },
+    siteUrl: function () {
+      var v = fields.siteUrl.value.trim();
+      if (!v) return { state: "err", msg: "This one's required — where should people find you?" };
+      if (!isLikelyUrl(v)) return { state: "err", msg: "That's missing its .com — full address like https://acmebakery.com" };
+      return { state: "ok", msg: "" };
+    },
+    summary: function () {
+      var v = fields.summary.value.trim();
+      if (!v) return { state: "err", msg: "This one's required — one sentence about what you do." };
+      return { state: "ok", msg: "" };
+    },
+    contactEmail: function () {
+      var v = fields.contactEmail.value.trim();
+      if (!v) return { state: "", msg: "" };
+      if (!isLikelyEmail(v)) return { state: "err", msg: "That doesn't look like an email — try hello@acmebakery.com" };
+      return { state: "ok", msg: "" };
+    }
+  };
+
+  var msgEls = {
+    siteName: document.getElementById("site-name-msg"),
+    siteUrl: document.getElementById("url-hint"),
+    summary: document.getElementById("summary-msg"),
+    contactEmail: document.getElementById("contact-email-msg")
+  };
+
+  var touched = {};
+
+  function runValidation(key) {
+    var validate = validators[key];
+    if (!validate || !touched[key]) return;
+    var result = validate();
+    var input = fields[key];
+    var msgEl = msgEls[key];
+    input.classList.remove("ok", "err");
+    if (result.state) input.classList.add(result.state);
+    if (msgEl) {
+      msgEl.textContent = result.msg;
+      msgEl.classList.remove("ok", "err");
+      if (result.state) msgEl.classList.add(result.state);
+      msgEl.classList.toggle("is-hidden", !result.msg);
+    }
+  }
+
+  Object.keys(validators).forEach(function (key) {
+    fields[key].addEventListener("blur", function () { touched[key] = true; runValidation(key); });
+  });
+
+  /* ---------- try an example ---------- */
+
+  var EXAMPLE = {
+    siteName: "Amaro & Co.",
+    siteUrl: "https://amaroandco.com",
+    summary: "We roast coffee in small batches and run a neighborhood café in Portland, OR.",
+    about: "Family-run since 2019. We roast every Tuesday and sell whole-bean bags online and in the café.",
+    pagesKey: "Home | https://amaroandco.com | Our story, hours, and what's brewing this week\nMenu | /menu | Espresso drinks, drip coffee, and pastries\nVisit | /visit | Address, hours, and parking",
+    pagesProducts: "House Blend Beans | /shop/house-blend | 12oz bag, medium roast, shipped weekly\nCold Brew Concentrate | /shop/cold-brew | Ready to dilute, 32oz bottle",
+    pagesGuides: "Wholesale orders | /wholesale | Bulk pricing for cafés and offices\nRoast notes | /roast-notes | Origin, process, and tasting notes for each bag",
+    notes: "Closed Mondays.\nCafé seating is first-come, first-served.\nWholesale orders need 48 hours notice.",
+    contactEmail: "hello@amaroandco.com"
+  };
+
+  var isExample = false;
+
+  function clearExampleFlag() {
+    if (!isExample) return;
+    isExample = false;
+    if (exampleTag) exampleTag.classList.add("is-hidden");
+  }
+
+  function fillExample() {
+    Object.keys(EXAMPLE).forEach(function (k) {
+      if (fields[k]) fields[k].value = EXAMPLE[k];
+    });
+    isExample = true;
+    if (exampleTag) exampleTag.classList.remove("is-hidden");
+    Object.keys(validators).forEach(function (key) { touched[key] = true; runValidation(key); });
+    generate();
+    JB.toast("Example loaded — edit any field to make it yours");
+  }
+
+  var btnTry = document.getElementById("btn-try");
+  var btnTryEmpty = document.getElementById("btn-try-empty");
+  if (btnTry) btnTry.addEventListener("click", fillExample);
+  if (btnTryEmpty) btnTryEmpty.addEventListener("click", fillExample);
+
+  /* ---------- paste-friendly single-line fields ---------- */
+
+  [fields.siteName, fields.siteUrl, fields.summary, fields.contactEmail].forEach(function (el) {
+    el.addEventListener("paste", function () {
+      setTimeout(function () { el.value = el.value.trim(); }, 0);
+    });
+  });
+
+  /* ---------- persistence (unchanged) ---------- */
+
+  function persist() {
+    try {
+      var data = {};
+      Object.keys(fields).forEach(function (k) { data[k] = fields[k].value; });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) { /* storage unavailable — ignore */ }
+  }
+
+  function restore() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var data = JSON.parse(raw);
+      Object.keys(fields).forEach(function (k) {
+        if (typeof data[k] === "string") fields[k].value = data[k];
+      });
+    } catch (e) { /* corrupt/blocked storage — ignore */ }
+  }
+
+  /* ---------- first-run hint ---------- */
+
+  var hintEl = document.getElementById("hint-once");
+  if (hintEl) {
+    try {
+      if (localStorage.getItem(HINT_KEY)) hintEl.classList.add("is-hidden");
+    } catch (e) { /* storage unavailable — ignore */ }
+    var hintDismiss = document.getElementById("hint-dismiss");
+    if (hintDismiss) {
+      hintDismiss.addEventListener("click", function () {
+        hintEl.classList.add("is-hidden");
+        try { localStorage.setItem(HINT_KEY, "1"); } catch (e) { /* ignore */ }
+      });
+    }
+  }
+
+  /* ---------- wire up ---------- */
+
+  Object.keys(fields).forEach(function (k) {
+    fields[k].addEventListener("input", function () {
+      clearExampleFlag();
+      if (validators[k]) runValidation(k);
+      generate();
+    });
+  });
+
+  function doCopy() {
+    if (codebox.classList.contains("is-empty")) {
+      JB.toast("Fill in site name, URL, and summary first");
+      return;
+    }
+    JB.copy(outputEl.textContent, "llms.txt copied — paste it into your site root");
+  }
+
+  function doDownload() {
+    if (codebox.classList.contains("is-empty")) {
+      JB.toast("Fill in site name, URL, and summary first");
+      return;
+    }
+    JB.download("llms.txt", outputEl.textContent, "text/plain;charset=utf-8");
+    JB.toast("llms.txt downloaded to your device");
+  }
+
+  document.getElementById("btn-copy").addEventListener("click", doCopy);
+  document.getElementById("btn-download").addEventListener("click", doDownload);
+  var btnCopyMobile = document.getElementById("btn-copy-mobile");
+  var btnDownloadMobile = document.getElementById("btn-download-mobile");
+  if (btnCopyMobile) btnCopyMobile.addEventListener("click", doCopy);
+  if (btnDownloadMobile) btnDownloadMobile.addEventListener("click", doDownload);
+
+  restore();
+  generate();
+})();
+</script>
+</body>
+</html>
