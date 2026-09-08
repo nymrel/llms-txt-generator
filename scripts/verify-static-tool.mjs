@@ -85,8 +85,12 @@ for (const pattern of prohibitedClaims) {
   check(!pattern.test(combinedCopy), "unsupported outcome claim remains: " + pattern);
 }
 
-const staticMarkup = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
-const ids = [...staticMarkup.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
+// Ignore script source while inspecting IDs; do not transform HTML as if sanitized.
+const scriptRanges = [...html.matchAll(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi)]
+  .map((match) => [match.index, match.index + match[0].length]);
+const ids = [...html.matchAll(/\bid="([^"]+)"/g)]
+  .filter((match) => !scriptRanges.some(([start, end]) => match.index >= start && match.index < end))
+  .map((match) => match[1]);
 const duplicateIds = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
 check(duplicateIds.length === 0, "duplicate element ids: " + duplicateIds.join(", "));
 
