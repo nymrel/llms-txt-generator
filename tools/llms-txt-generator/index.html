@@ -31,7 +31,7 @@
       "url": "https://nymrel.com/tools/llms-txt-generator",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web browser",
-      "description": "A guided form that produces a ready-to-publish llms.txt file — the curated site map AI crawlers look for at /llms.txt. Free to use, runs entirely in the browser.",
+      "description": "A guided form that produces a Markdown-formatted llms.txt file following the open llms.txt proposal. Free to use; generation runs in the browser.",
       "publisher": {
         "@id": "https://nymrel.com/#organization"
       },
@@ -86,7 +86,7 @@
           "name": "Do I need an llms.txt file?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "It's not required, but AI assistants increasingly check for one before they crawl your whole site. A small file that points them straight to your best pages makes it far more likely they find and quote you correctly."
+            "text": "No. llms.txt is an open convention proposal, not a guaranteed crawler or citation signal. It can give compatible tools a concise map of a site; support varies, and it complements rather than replaces established search and crawl controls."
           }
         },
         {
@@ -102,7 +102,7 @@
           "name": "Is my data safe?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Everything runs in your browser. Nothing you type here leaves your device — there is no server collecting it."
+            "text": "Generation happens locally, and entered values may be stored in your browser. Product values are not attached to network requests. The hosted page also loads aggregate Vercel Web Analytics."
           }
         },
         {
@@ -110,7 +110,7 @@
           "name": "What's included in the Deluxe Kit?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "A five-file zip built from what you typed in: your llms.txt tightened, a robots.txt allowlist naming 12 AI crawlers, an Organization JSON-LD block, and a printable install checklist written for your platform. It is generated in your browser and downloads right after checkout."
+            "text": "A five-file zip built from what you typed in: your llms.txt tightened, a robots.txt allowlist naming 12 AI-related agents and publisher controls, an Organization JSON-LD block, and a printable install checklist written for your platform. It is generated in your browser and downloads right after checkout."
           }
         }
       ]
@@ -145,7 +145,7 @@
 
   /* line-number gutter — a separate element so Copy never touches it */
   .codebox-body { display: flex; max-height: 560px; overflow: auto; }
-  .code-line-numbers { user-select: none; text-align: right; padding: 1.3rem 0.7rem 1.3rem 1rem; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.6; color: var(--ink-faint); opacity: 0.45; white-space: pre; border-right: 1px solid var(--line); flex-shrink: 0; }
+  .code-line-numbers { user-select: none; text-align: right; padding: 1.3rem 0.7rem 1.3rem 1rem; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.6; color: var(--ink-faint); white-space: pre; border-right: 1px solid var(--line); flex-shrink: 0; }
   #output-text { margin: 0; padding: 1.3rem; overflow: visible; max-height: none; min-width: 0; flex: 1 1 auto; }
 </style>
 <script type="application/ld+json">
@@ -185,7 +185,7 @@
         <div class="kicker" style="margin-bottom:0">Free tool · about 3 minutes</div>
       </div>
       <h1 style="max-width:12em">Give AI assistants a map of your site.</h1>
-      <p class="lede">llms.txt is a plain-text file at your site root that tells AI assistants what your site is and where the important pages are — a growing convention they can read in one pass. Answer a few questions and get one that's ready to publish.</p>
+      <p class="lede">llms.txt is an open Markdown-based proposal for a concise map at your site root. Compatible tools can read it in one pass, but support varies and outcomes are not guaranteed. Answer a few questions and get a file that's ready to review and publish.</p>
     </div>
   </section>
 
@@ -320,7 +320,7 @@ Prices shown are before tax."></textarea>
       <div class="panel step-card">
         <div class="step-num">STEP 3</div>
         <h3>Check it in a browser</h3>
-        <p>Visit <span class="mono">yoursite.com/llms.txt</span> and confirm the plain text loads — that's what AI crawlers will see.</p>
+        <p>Visit <span class="mono">yoursite.com/llms.txt</span> and confirm the plain text loads — that's what any compatible client will receive.</p>
       </div>
     </div>
   </section>
@@ -334,7 +334,7 @@ Prices shown are before tax."></textarea>
         <div class="amount">$0 <small>forever</small></div>
         <ul>
           <li>Unlimited llms.txt generation</li>
-          <li>Runs entirely in your browser</li>
+          <li>Generation runs in your browser; drafts are stored locally</li>
           <li>No sign-up, no email required</li>
           <li>Copy or download anytime</li>
         </ul>
@@ -345,7 +345,7 @@ Prices shown are before tax."></textarea>
         <div class="amount">$9 <small>one-time</small></div>
         <ul>
           <li>Your llms.txt tightened — absolute URLs, duplicate pages dropped, long descriptions trimmed</li>
-          <li>robots.txt allowlist naming 12 AI crawlers, written for your platform</li>
+          <li>robots.txt allowlist naming 12 AI-related agents and publisher controls</li>
           <li>JSON-LD Organization block built from your details</li>
           <li>One-page install checklist, printable</li>
           <li>Unlocks on this page and downloads right after checkout</li>
@@ -366,7 +366,7 @@ Prices shown are before tax."></textarea>
       </details>
       <details>
         <summary>Do I need an llms.txt file?</summary>
-        <p class="a">It's not required, but AI assistants increasingly check for one before they crawl your whole site. A small file that points them straight to your best pages makes it far more likely they find and quote you correctly.</p>
+        <p class="a">No. llms.txt is an open convention proposal, not a guaranteed crawler or citation signal. It can give compatible tools a concise map of a site; support varies, and it complements rather than replaces established search and crawl controls.</p>
       </details>
       <details>
         <summary>How do I install the file on my site?</summary>
@@ -374,11 +374,11 @@ Prices shown are before tax."></textarea>
       </details>
       <details>
         <summary>Is my data safe?</summary>
-        <p class="a">Yes. Everything runs in your browser. Nothing you type here leaves your device — there is no server collecting it.</p>
+        <p class="a">Generation happens locally, and entered values may be stored in your browser. Product values are not attached to network requests. The hosted page also loads aggregate Vercel Web Analytics.</p>
       </details>
       <details>
         <summary>What's included in the Deluxe Kit?</summary>
-        <p class="a">A five-file zip built from what you typed above: your llms.txt tightened, a robots.txt allowlist naming 12 AI crawlers, an Organization JSON-LD block, and a printable install checklist written for your platform. It is generated here in your browser and downloads as soon as you're back from checkout.</p>
+        <p class="a">A five-file zip built from what you typed above: your llms.txt tightened, a robots.txt allowlist naming 12 AI-related agents and publisher controls, an Organization JSON-LD block, and a printable install checklist written for your platform. It is generated here in your browser and downloads as soon as you're back from checkout.</p>
       </details>
     </div>
   </section>
@@ -388,7 +388,7 @@ Prices shown are before tax."></textarea>
   <div class="wrap cols">
     <div>
       <p class="fh">Nymrel Tools</p>
-      <p style="max-width:26em">Small, sharp tools from a working studio. Everything runs in your browser; nothing you paste leaves your device.</p>
+      <p style="max-width:26em">Small, sharp tools from a working studio. Generation happens in your browser; the hosted page also loads aggregate Vercel Web Analytics.</p>
       <p class="mono" style="font-size:0.78rem">© <span data-year>2026</span> JalenBuilds LLC</p>
       <p class="mono" style="font-size:0.78rem"><a href="https://nymrel.com?utm_source=jalenbuilds-tools&amp;utm_medium=footer-credit&amp;utm_campaign=built-by-nymrel" rel="author">Built by Nymrel</a></p>
     </div>
@@ -538,7 +538,7 @@ Prices shown are before tax."></textarea>
     updateHint(hints.pagesProducts, products.skipped);
     updateHint(hints.pagesGuides, guides.skipped);
 
-    var hasRequired = Boolean(siteName && siteUrl && summary);
+    var hasRequired = Boolean(siteName && siteUrl && summary && isLikelyUrl(siteUrl));
     document.body.classList.toggle("has-action-bar", hasRequired);
     if (actionBarEl) actionBarEl.classList.toggle("is-hidden", !hasRequired);
 
