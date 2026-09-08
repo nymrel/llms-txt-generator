@@ -7,10 +7,11 @@ your site that an AI assistant can read in one pass.
 
 ## What it does
 
-`llms.txt` is a plain-text file at the root of your site that tells AI assistants what
-you do and which pages matter. This tool asks what your site is, what you want quoted,
-and which URLs are worth pointing at — then writes the file for you, formatted correctly
-and ready to upload.
+`llms.txt` is an open Markdown-based proposal for a concise map at the root of a site.
+Compatible tools can use it to find the site's description and important pages; support
+varies, and the file does not guarantee crawling, indexing, citations, or traffic. This
+tool asks what your site is and which URLs matter, then writes the proposal's core shape
+for you to review and upload.
 
 No account, no email gate, no trial clock.
 
@@ -40,7 +41,7 @@ disk will render unstyled.
 | `assets/checkout-config.js` | The checkout registry template |
 | `assets/fonts/` | The three fonts the page uses |
 
-`tools/llms-txt-generator/index.html` is byte-for-byte the file nymrel.com serves.
+`tools/llms-txt-generator/index.html` is the source intended for Nymrel's canonical llms.txt Generator surface. This repository alone does not verify the current deployed bytes.
 
 ## A note on the paid tier
 
@@ -48,9 +49,22 @@ The page offers a paid kit. `assets/checkout-config.js` here is the committed te
 with no payment links set, so in a local copy the upgrade button falls back to email.
 The free generator writes a complete file on its own.
 
-## Privacy
+## Privacy and local state
 
-Nothing you type leaves your browser. The tool makes no server calls.
+Generation happens locally, and entered values are saved in your browser's local storage
+so a draft survives a reload. Product values are not attached to network requests. The
+hosted page also loads aggregate Vercel Web Analytics; a local copy does not load that
+endpoint successfully unless the host provides it.
+
+The Pro kit's HTML Organization artifact escapes literal `<` characters inside JSON
+values as `\u003c`. `JSON.parse` restores the original value, while the encoded source
+cannot terminate the enclosing `application/ld+json` script block early.
+
+## Verification
+
+Node 24.20.0 and npm 11.19.1 are the primary verification runtime; CI also exercises
+Node 22.12.0. Run `npm ci --ignore-scripts`, install Chromium once with
+`npx playwright install chromium`, then run `npm run check`.
 
 ## Credits
 
@@ -59,7 +73,8 @@ Font License.
 
 ## Who built it
 
-[Nymrel](https://nymrel.com) — a software studio that builds and runs its own products.
+[Nymrel](https://nymrel.com) — we build and run products, services, websites, software,
+and apps.
 
 ## License
 
