@@ -41,7 +41,7 @@ disk will render unstyled.
 | `assets/checkout-config.js` | The checkout registry template |
 | `assets/fonts/` | The three fonts the page uses |
 
-`tools/llms-txt-generator/index.html` is byte-for-byte the file nymrel.com serves.
+`tools/llms-txt-generator/index.html` is the source intended for Nymrel's canonical llms.txt Generator surface. This repository alone does not verify the current deployed bytes.
 
 ## A note on the paid tier
 
